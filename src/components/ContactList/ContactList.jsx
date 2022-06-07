@@ -23,6 +23,12 @@ export default function ContactList({ contacts, handleDelete }) {
 }
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.exact({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+    })
+  ),
   handleDelete: PropTypes.func.isRequired,
 };
