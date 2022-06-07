@@ -20,7 +20,6 @@ class ContactForm extends Component {
     const { onSubmit } = this.props;
     e.preventDefault();
 
-    this.setState({ id: nanoid() });
     onSubmit(this.state);
 
     this.reset();
@@ -29,6 +28,10 @@ class ContactForm extends Component {
   handleInputChange = e => {
     const { name, value } = e.currentTarget;
     this.setState({ [name]: value });
+  };
+
+  setId = () => {
+    this.setState({ id: nanoid() });
   };
 
   reset = () => {
@@ -42,7 +45,11 @@ class ContactForm extends Component {
     const { name, number } = this.state;
 
     return (
-      <form className={s.container} onSubmit={this.handleFormSubmit}>
+      <form
+        className={s.container}
+        onSubmit={this.handleFormSubmit}
+        onChange={this.setId}
+      >
         <div className={s.fieldContainer}>
           <label htmlFor={nameId} className={s.label}>
             Name
