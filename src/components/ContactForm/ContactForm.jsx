@@ -3,25 +3,43 @@ import { nanoid } from 'nanoid';
 import { Component } from 'react';
 import s from './ContactForm.module.css';
 
+const INITIAL_STATE = {
+  id: '',
+  name: '',
+  number: '',
+};
+
 class ContactForm extends Component {
   static propTypes = {
     onSubmit: PropTypes.func.isRequired,
   };
 
+  state = { ...INITIAL_STATE };
+
   handleFormSubmit = e => {
     const { onSubmit } = this.props;
     e.preventDefault();
-    const form = e.currentTarget;
-    const id = nanoid();
-    const name = form.elements.name.value;
-    const number = form.elements.number.value;
-    onSubmit({ id, name, number });
-    form.reset();
+
+    this.setState({ id: nanoid() });
+    onSubmit(this.state);
+
+    this.reset();
+  };
+
+  handleInputChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
+  };
+
+  reset = () => {
+    this.setState({ ...INITIAL_STATE });
   };
 
   render() {
     const nameId = nanoid();
     const numberId = nanoid();
+
+    const { name, number } = this.state;
 
     return (
       <form className={s.container} onSubmit={this.handleFormSubmit}>
@@ -34,6 +52,8 @@ class ContactForm extends Component {
             name="name"
             id={nameId}
             className={s.input}
+            value={name}
+            onChange={this.handleInputChange}
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
             required
@@ -48,6 +68,8 @@ class ContactForm extends Component {
             name="number"
             id={numberId}
             className={s.input}
+            value={number}
+            onChange={this.handleInputChange}
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
