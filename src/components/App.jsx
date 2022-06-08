@@ -39,11 +39,11 @@ class App extends Component {
 
   handleFilterChange = e => {
     const { value } = e.currentTarget;
-    this.setState({ filter: value.toLowerCase() });
+    this.setState({ filter: value });
   };
 
-  filterContacts = filter => {
-    const normalizedFilter = filter.toLowerCase();
+  filterContacts = () => {
+    const normalizedFilter = this.state.filter.toLowerCase();
     return this.state.contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
@@ -51,7 +51,7 @@ class App extends Component {
 
   render() {
     const { filter } = this.state;
-    const filteredContacts = this.filterContacts(filter);
+    const filteredContacts = this.filterContacts();
 
     return (
       <div className="container">
@@ -59,7 +59,7 @@ class App extends Component {
         <ContactForm onSubmit={contact => this.addContact(contact)} />
 
         <h2>Contacts</h2>
-        <Filter handleFilterChange={this.handleFilterChange} />
+        <Filter handleFilterChange={this.handleFilterChange} filter={filter} />
         <ContactList
           contacts={filteredContacts}
           handleDelete={this.handleDelete}
